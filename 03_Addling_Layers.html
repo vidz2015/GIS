@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name = "viewport" content="initial-scale-1,maximum-scale-1,user-scalable=no">
+    <title>Sample </title>
+       <!-- Including arcgis css,-->
+   <link href="https://js.arcgis.com/4.8/esri/css/main.css" rel="stylesheet" type="text/css">
+   <script src="https://js.arcgis.com/4.8"></script>
+   <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #layerToggle {
+      top: 20px;
+      right: 20px;
+      position: absolute;
+      z-index: 99;
+      background-color: white;
+      border-radius: 8px;
+      padding: 10px;
+      opacity: 0.75;
+    }
+  </style>
+   <script>
+      require([
+       "esri/Map",
+       "esri/views/SceneView",
+       "esri/layers/Tilelayer",
+       "dojo/dom",
+       "dojo/on",
+       "dojo/domReady!"
+      ],function(Map,SceneView,Tilelayer,dom,on){
+
+         var transportLayer = new Tilelayer({
+             url:"https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer",
+             id:"streets",
+             visible:false
+         });
+         var houseinglayer = Tilelayer({
+            url: "https://tiles.arcgis.com/tiles/nGt4QxSblgDfeJn9/arcgis/rest/services/New_York_Housing_Density/MapServer",
+            id: "ny-housing",
+          opacity: 0.9
+         })
+
+        //Step 3: Add Layers to map 
+         var map = new Map({
+             basemap:"oceans",
+             layers:[housinglayer]
+         });
+
+         map.layers.add(transportLayer);
+        //Step 3: Create view  
+        var view = new SceneView({
+          container:"viewDiv",
+          map:map
+        });
+
+        view.on("layerview-create",function(event){
+          if(event.layer.id ==="ny-housing"){
+           // Explore the properties of the population layer's layer view here
+            console.log("LayerView for male population created!", event.layerView);
+          }
+          if(event.layer.id ==="streets"){
+              // Explore the properties of the transportation layer's layer view here
+              // Explore the properties of the transportation layer's layer view here
+              console.log("LayerView for streets created!", event.layerView);
+          }
+        })
+
+
+      });
+
+   </script>
+</head>
+<body>
+<div id ="mapDiv"/>
+
+</body>
+
+
+</html>
